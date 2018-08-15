@@ -3,6 +3,8 @@ const nodes : number = 5
 class LinkedBeadMoverStage {
     canvas : HTMLCanvasElement = document.createElement('canvas')
     context : CanvasRenderingContext2D
+    linkedBeadMover : LinkedBeadMover = new LinkedBeadMover()
+    animator : Animator = new Animator()
 
     constructor() {
         this.initCanvas()
@@ -20,11 +22,20 @@ class LinkedBeadMoverStage {
     render() {
         this.context.fillStyle = '#212121'
         this.context.fillRect(0, 0, w, h)
+        this.linkedBeadMover.draw(this.context)
     }
 
     handleTap() {
         this.canvas.onmousedown = () => {
-
+            this.linkedBeadMover.startUpdating(() => {
+                this.animator.start(() => {
+                    this.render()
+                    this.linkedBeadMover.update(() => {
+                        this.animator.stop()
+                        this.render()
+                    })
+                })
+            })
         }
     }
 
