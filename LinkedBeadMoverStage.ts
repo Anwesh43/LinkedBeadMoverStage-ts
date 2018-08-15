@@ -73,3 +73,76 @@ class Animator {
         }
     }
 }
+
+class BMNode {
+    prev : BMNode
+    next : BMNode
+    state : State = new State()
+    constructor(private i : number) {
+        this.addNeighbor()
+    }
+
+    addNeighbor() {
+        if (this.i < nodes - 1) {
+            this.next = new BMNode(this.i + 1)
+            this.next.prev = this
+        }
+    }
+
+    draw(context : CanvasRenderingContext2D) {
+        const gap : number = w / nodes
+        context.save()
+        context.translate(this.i * gap + gap / 2, h/2)
+        const r = gap / 8
+        const sc1 : number = Math.min(0.5, this.state.scale)
+        const sc2 : number = Math.min(0.5, Math.max(0, this.state.scale))
+        context.lineWidth = r
+        context.lineCap = 'round'
+        const color : string = '#F9A825'
+        context.strokeStyle = color
+        context.fillStyle = color
+        context.beginPath()
+        var k : number = 0
+        var cx : number = 0, cy : number = 0
+        for (var j = 180 * (1 - sc2); j >= 180 * (1 - sc1); j --)  {
+            const x = gap/2 + gap * Math.cos(j * Math.PI/180)
+            const y = gap * Math.sin(j * Math.PI/180)
+            if (k == 0) {
+                context.moveTo(x, y)
+                cx = x
+                cy = y
+            } else {
+                context.lineTo(x, y)
+            }
+            k++
+        }
+        context.stroke()
+        context.beginPath()
+        context.arc(cx, cy, r, 0, 2 * Math.PI)
+        context.fill()
+        context.restore()
+        if (this.next) {
+            this.next.draw(context)
+        }
+    }
+
+    update(cb : Function) {
+        this.state.update(cb)
+    }
+
+    startUpdating(cb : Function) {
+        this.state.startUpdating(cb)
+    }
+
+    getNext(dir : number, cb : Function) : BMNode {
+        var curr : BMNode = this.prev
+        if (dir == 1) {
+            curr = this.next
+        }
+        if (curr) {
+            return curr
+        }
+        cb()
+        return this
+    }
+}
