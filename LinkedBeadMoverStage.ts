@@ -32,3 +32,26 @@ class LinkedBeadMoverStage {
         const stage : LinkedBeadMoverStage = new LinkedBeadMoverStage()
     }
 }
+
+class State {
+    scale : number = 0
+    dir : number = 0
+    prevScale : number = 0
+
+    startUpdating(cb : Function) {
+        if (this.dir == 0) {
+            this.dir = 1 - 2 * this.prevScale
+            cb()
+        }
+    }
+
+    update(cb : Function) {
+        this.scale += 0.05 * this.dir
+        if (Math.abs(this.scale - this.prevScale) > 1) {
+            this.scale = this.prevScale + this.dir
+            this.dir = 0
+            this.prevScale = this.scale
+            cb()
+        }
+    }
+}
