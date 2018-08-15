@@ -105,8 +105,8 @@ class BMNode {
         context.save()
         context.translate(this.i * gap + gap / 2, h/2)
         const r = gap / 8
-        const sc1 : number = Math.min(0.5, this.state.scale)
-        const sc2 : number = Math.min(0.5, Math.max(0, this.state.scale))
+        const sc1 : number = Math.min(0.5, this.state.scale) * 2
+        const sc2 : number = Math.min(0.5, Math.max(0, this.state.scale - 0.5)) * 2
         context.lineWidth = r
         context.lineCap = 'round'
         const color : string = '#F9A825'
@@ -116,8 +116,8 @@ class BMNode {
         var k : number = 0
         var cx : number = 0, cy : number = 0
         for (var j = 180 * (1 - sc2); j >= 180 * (1 - sc1); j --)  {
-            const x = gap/2 + gap * Math.cos(j * Math.PI/180)
-            const y = gap * Math.sin(j * Math.PI/180)
+            const x = gap / 2 + (gap / 2) * Math.cos(j * Math.PI/180)
+            const y = (gap / 2) * Math.sin(j * Math.PI/180)
             if (k == 0) {
                 context.moveTo(x, y)
                 cx = x

@@ -97,8 +97,8 @@ var BMNode = (function () {
         context.save();
         context.translate(this.i * gap + gap / 2, h / 2);
         var r = gap / 8;
-        var sc1 = Math.min(0.5, this.state.scale);
-        var sc2 = Math.min(0.5, Math.max(0, this.state.scale));
+        var sc1 = Math.min(0.5, this.state.scale) * 2;
+        var sc2 = Math.min(0.5, Math.max(0, this.state.scale - 0.5)) * 2;
         context.lineWidth = r;
         context.lineCap = 'round';
         var color = '#F9A825';
@@ -108,8 +108,8 @@ var BMNode = (function () {
         var k = 0;
         var cx = 0, cy = 0;
         for (var j = 180 * (1 - sc2); j >= 180 * (1 - sc1); j--) {
-            var x = gap / 2 + gap * Math.cos(j * Math.PI / 180);
-            var y = gap * Math.sin(j * Math.PI / 180);
+            var x = gap / 2 + (gap / 2) * Math.cos(j * Math.PI / 180);
+            var y = (gap / 2) * Math.sin(j * Math.PI / 180);
             if (k == 0) {
                 context.moveTo(x, y);
                 cx = x;
